@@ -39,6 +39,7 @@ class OAForgotPasswordEmpty(unittest.TestCase):
         try: self.assertEqual(u"Отправить", driver.find_element_by_css_selector("button.form-button.enter").text)
         except AssertionError as e: self.verificationErrors.append(str(e))
         driver.find_element_by_xpath("//form[@id='restore-form']/div/span").click()
+        time.sleep(1)
         try: self.assertEqual(u"Демо-вход", driver.find_element_by_xpath("//div[@id='demo']/span[2]").text)
         except AssertionError as e: self.verificationErrors.append(str(e))
         try: self.assertEqual(u"Вход", driver.find_element_by_xpath("//div[@id='login']/span[2]").text)
