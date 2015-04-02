@@ -33,6 +33,7 @@ class OACheckEnterTrueFalse(unittest.TestCase):
         driver.find_element_by_name("LoginForm[pass]").send_keys("654321")
         time.sleep(1)
         driver.find_element_by_css_selector("button.form-button.enter").click()
+        time.sleep(1)
         try: self.assertEqual(u"Неправильный логин или пароль", driver.find_element_by_css_selector("h3").text)
         except AssertionError as e: self.verificationErrors.append(str(e))
         driver.find_element_by_id("main-window-notification-area").click()
