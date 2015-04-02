@@ -6,9 +6,8 @@ from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import NoAlertPresentException
 import unittest, time, re
-from datetime import datetime
 
-class OACheckEnterTrueFalse(unittest.TestCase):
+class OAForgotPasswordEmpty(unittest.TestCase):
     def setUp(self):
         self.driver = webdriver.Firefox()
         self.driver.implicitly_wait(30)
@@ -16,32 +15,30 @@ class OACheckEnterTrueFalse(unittest.TestCase):
         self.verificationErrors = []
         self.accept_next_alert = True
     
-    def test_o_a_check_enter_true_false(self):
+    def test_o_a_forgot_password_empty(self):
         driver = self.driver
         driver.get(self.base_url + "/")
         driver.find_element_by_xpath("//div[@id='login']/span[2]").click()
         time.sleep(1)
-        driver.find_element_by_name("LoginForm[login]").clear()
+        driver.find_element_by_link_text(u"Забыли пароль?").click()
         time.sleep(1)
-        varakin_start = datetime (2015,1,1)
-        varakin_today = datetime.today()
-        varakin_superman = abs(varakin_start - varakin_today)
-        driver.find_element_by_name("LoginForm[login]").send_keys("varakin.%d@mail.ru" % int(varakin_superman.total_seconds() / 60))
-        time.sleep(1)
-        driver.find_element_by_name("LoginForm[pass]").clear()
-        time.sleep(1)
-        driver.find_element_by_name("LoginForm[pass]").send_keys("654321")
-        time.sleep(1)
+        try: self.assertEqual(u"Вспомнить пароль", driver.find_element_by_css_selector("#restore-form > div.content > h4").text)
+        except AssertionError as e: self.verificationErrors.append(str(e))
+        try: self.assertEqual(u"79113334455 или mail@example.net", driver.find_element_by_css_selector("#restore-form > div.content > div.form-input-advice").text)
+        except AssertionError as e: self.verificationErrors.append(str(e))
+        try: self.assertEqual(u"Отправьте электронный адрес или телефон, указанный в личном кабинете. Мы пришлем Вам инструкции по восстановлению пароля.", driver.find_element_by_xpath("//form[@id='restore-form']/div/div[4]").text)
+        except AssertionError as e: self.verificationErrors.append(str(e))
         driver.find_element_by_css_selector("button.form-button.enter").click()
         time.sleep(1)
-        try: self.assertEqual(u"Неправильный логин или пароль", driver.find_element_by_css_selector("h3").text)
+        try: self.assertEqual(u"Вспомнить пароль", driver.find_element_by_css_selector("#restore-form > div.content > h4").text)
         except AssertionError as e: self.verificationErrors.append(str(e))
-        driver.find_element_by_id("main-window-notification-area").click()
-        time.sleep(1)
-        driver.find_element_by_xpath("//form[@id='login-form']/div/span").click()
-        time.sleep(1)
-        try: self.assertEqual("StarLine=", driver.find_element_by_id("logo").text)
+        try: self.assertEqual(u"79113334455 или mail@example.net", driver.find_element_by_css_selector("#restore-form > div.content > div.form-input-advice").text)
         except AssertionError as e: self.verificationErrors.append(str(e))
+        try: self.assertEqual(u"Отправьте электронный адрес или телефон, указанный в личном кабинете. Мы пришлем Вам инструкции по восстановлению пароля.", driver.find_element_by_xpath("//form[@id='restore-form']/div/div[4]").text)
+        except AssertionError as e: self.verificationErrors.append(str(e))
+        try: self.assertEqual(u"Отправить", driver.find_element_by_css_selector("button.form-button.enter").text)
+        except AssertionError as e: self.verificationErrors.append(str(e))
+        driver.find_element_by_xpath("//form[@id='restore-form']/div/span").click()
         try: self.assertEqual(u"Демо-вход", driver.find_element_by_xpath("//div[@id='demo']/span[2]").text)
         except AssertionError as e: self.verificationErrors.append(str(e))
         try: self.assertEqual(u"Вход", driver.find_element_by_xpath("//div[@id='login']/span[2]").text)
